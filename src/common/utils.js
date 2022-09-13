@@ -10,13 +10,10 @@ const sendError = (chatId, message) => {
   bot.sendMessage(chatId, message ?? ERRORS.SOMETHING_WENT_WRONG);
 };
 
-const profileExists = (userId) => {
-  return UserModel.count({ where: { id: userId } }).then((count) => {
-    if (count != 0) {
-      return false;
-    }
-    return true;
-  });
+const profileExists = async (userId) => {
+  return UserModel.findOne({ where: { id: userId } })
+    .then((token) => token !== null)
+    .then((isUnique) => isUnique);
 };
 
 module.exports = { sendError, sendMessage, ERRORS, profileExists };
